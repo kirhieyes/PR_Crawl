@@ -30,13 +30,11 @@ async function StartCrawl() {
         var time = Number(moment().format("HHmm"));
         
         if(time > 600) {
-            console.log("크롤링 파워볼 스케쥴 실행 : " + time);
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
             currBall = -1;
             if(currRound === 72) return;
-            console.log("동행복권 실행 : " + currRound);
             RunPowerball();
             RunChance();
         }
@@ -46,13 +44,11 @@ async function StartCrawl() {
         var time = Number(moment().format("HHmm"));
         
         if(time > 0 && time <= 600) {
-            console.log("크롤링 EOS 스케쥴 실행 : " + time);
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
             currBall = -1;
             if(currRound === 72) return;
-            console.log("엔트리 EOS 실행 : " + currRound);
             RunEOS();
         }
     });
@@ -77,7 +73,6 @@ async function RunPowerball() {
             if(data.round === currRound){
                 currBall = data.pb;
                 SendData();
-                console.log(currRound + " 라운드 베픽 값 넣음 : [" + currBall + "]");
             }else{
                 callNum++;
                 RunPowerball__();
@@ -106,7 +101,6 @@ async function RunEOS() {
             if(data.round === currRound){
                 currBall = data.pb;
                 SendData();
-                console.log(currRound + " 라운드 베픽 값 넣음 : [" + currBall + "]");
             }else{
                 callNum++;
                 RunEOS__();
@@ -135,7 +129,6 @@ async function RunPowerball__() {
             if(data.date_round === currRound){
                 currBall = Number(data.ball[5]);
                 SendData();
-                console.log(currRound + " 라운드 값 엔트리 값 넣음 : [" + currBall + "]");
             }else{
                 callNum++;
                 RunPowerball();
@@ -164,7 +157,6 @@ async function RunEOS__() {
             if(data.date_round === currRound){
                 currBall = Number(data.ball[5]);
                 SendData();
-                console.log(currRound + " 라운드 엔트리 값 넣음 : [" + currBall + "]");
             }else{
                 callNum++;
                 RunEOS();
@@ -209,7 +201,6 @@ async function RunChance() {
         if(round === currRound){
             currBall = pBall;
             SendData();
-            console.log(currRound + " 라운드 우리볼 값 넣음 : [" + currBall + "]");
         }
     } catch (err) {        
         console.log("우리볼 파워볼 조회 실패");
@@ -347,7 +338,6 @@ function SendFailedData (turn, ball) {
     
         request(options, function(err, res, body) {
             if(res && res.statusCode === 200){
-                console.log(">>>>>>>> 결과 전송 성공");
             }else{
                 console.log("결과 전송 실패");
             }
@@ -376,7 +366,6 @@ async function RunFailed() {
                     getLastPowerball(failed.target).then(response => {
                         let body = response.data[0];
                         if(body.round === failed.round){
-                            console.log(body.round + " 라운드 미처리값 넣음 : [" + body.pb + "]");
                             SendFailedData(failed.gameno, body.pb);
                         }
                     }).catch(error => {
@@ -386,7 +375,6 @@ async function RunFailed() {
                     getLastEOS(failed.target).then(response => {
                         let body = response.data[0];
                         if(body.round === failed.round){
-                            console.log(body.round + " 라운드 미처리값 넣음 : [" + body.pb + "]");
                             SendFailedData(failed.gameno, body.pb);
                         }
                     }).catch(error => {
@@ -394,7 +382,6 @@ async function RunFailed() {
                     });
                 }
             }else if(data.code === "307"){
-                console.log("미처리 결과 없음");
             }else{
                 console.log("결과 전송 실패");
             }
