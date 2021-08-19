@@ -231,6 +231,7 @@ const getBepickPowerball = async (timestamp) => {
         });
     } catch (error) {
         console.log("베픽 파워볼 axios 실패");
+        console.log(error);
     }
 };
 
@@ -248,6 +249,7 @@ const getBepickEOS = async (timestamp) => {
         });
     } catch (error) {
         console.log("베픽 EOS axios 실패");
+        console.log(error);
     }
 };
 
@@ -262,6 +264,7 @@ const getEntryPowerball = async (timestamp) => {
         });
     } catch (error) {
         console.log("엔트리 파워볼 axios 실패");
+        console.log(error);
     }
 };
 
@@ -279,6 +282,7 @@ const getEntryEOS = async (timestamp) => {
         });
     } catch (error) {
         console.log("엔트리 EOS axios 실패");
+        console.log(error);
     }
 };
 
@@ -293,6 +297,7 @@ const getLastPowerball = async (round) => {
         });
     } catch (error) {
         console.log("베픽 LAST 파워볼 axios 실패");
+        console.log(error);
     }
 };
 
@@ -307,6 +312,7 @@ const getLastEOS = async (round) => {
         });
     } catch (error) {
         console.log("베픽 LAST EOS axios 실패");
+        console.log(error);
     }
 };
 
