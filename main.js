@@ -7,6 +7,7 @@ const request = require('request');
 
 let currRound = -1;
 let currTurn = -1;
+let currDonghang = -1;
 let currBall = -1;
 let browser;
 let page;
@@ -72,6 +73,7 @@ async function RunPowerball() {
             let data = response.data.update;
             if(data.round === currRound){
                 currBall = data.pb;
+                currDonghang = data.rownum;
                 SendData();
             }else{
                 callNum++;
@@ -100,6 +102,7 @@ async function RunEOS() {
             let data = response.data.update;
             if(data.round === currRound){
                 currBall = data.pb;
+                currDonghang = 0;
                 SendData();
             }else{
                 callNum++;
@@ -128,6 +131,7 @@ async function RunPowerball__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currBall = Number(data.ball[5]);
+                currDonghang = data.times;
                 SendData();
             }else{
                 callNum++;
@@ -156,6 +160,7 @@ async function RunEOS__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currBall = Number(data.ball[5]);
+                currDonghang = 0;
                 SendData();
             }else{
                 callNum++;
@@ -185,6 +190,7 @@ async function RunChance() {
         
         let roundStr = await frame.$eval('#round-history > tr:nth-child(1) > td:nth-child(1)', element => element.textContent);         // 1112606 (206)
         let roundArr = roundStr.split(' ');
+        let roundDong = Number(roundArr[0].trim());
         let roundStr1 = roundArr[1].replace('(', '');
         let roundStr2 = roundStr1.replace(')', '');
         let round = Number(roundStr2);
@@ -200,6 +206,7 @@ async function RunChance() {
 
         if(round === currRound){
             currBall = pBall;
+            currDonghang = roundDong;
             SendData();
         }
     } catch (err) {        
@@ -308,6 +315,7 @@ function SendData () {
             method: 'POST',
             form: {
                 turn: currTurn.toString(),
+                donghang: currDonghang.toString(),
                 round: currRound.toString(),
                 ball: currBall.toString()
             }
