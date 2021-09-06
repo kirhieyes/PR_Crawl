@@ -53,12 +53,6 @@ async function StartCrawl() {
             RunEOS();
         }
     });
-
-    schedule.scheduleJob("30 */32 * * * *", async function () {
-        RunFailed();
-    });
-
-    RunFailed();
 };
 
 // 베픽 파워볼
@@ -331,72 +325,6 @@ function SendData () {
     } catch (err) {
         console.log(err);
     }
-}
-
-function SendFailedData (turn, ball) {
-    try {
-        const options = {
-            uri: "http://165.76.184.119:3000/race/setResultBefore",
-            method: 'POST',
-            form: {
-                turn: turn.toString(),
-                ball: ball.toString()
-            }
-        }
-    
-        request(options, function(err, res, body) {
-            if(res && res.statusCode === 200){
-            }else{
-                console.log("결과 전송 실패");
-            }
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function RunFailed() {
-    console.log(">>>>>>>>>> RunFailed");
-    try {
-        const options = {
-            uri: "http://165.76.184.119:3000/race/getFailData",
-            method: 'POST',
-            form: {
-                
-            }
-        }
-    
-        request(options, function(err, res, body) {
-            let data = JSON.parse(body);
-            if(data.code === "200"){
-                let failed = data.data;
-                if(failed.type === 0){
-                    getLastPowerball(failed.target).then(response => {
-                        let body = response.data[0];
-                        if(body.round === failed.round){
-                            SendFailedData(failed.gameno, body.pb);
-                        }
-                    }).catch(error => {
-                        console.log("미처리 파워볼 조회 실패");
-                    });
-                }else{
-                    getLastEOS(failed.target).then(response => {
-                        let body = response.data[0];
-                        if(body.round === failed.round){
-                            SendFailedData(failed.gameno, body.pb);
-                        }
-                    }).catch(error => {
-                        console.log("미처리 EOS 조회 실패");
-                    });
-                }
-            }else if(data.code === "307"){
-            }else{
-                console.log("결과 전송 실패");
-            }
-        });
-    } catch(err) {
-        console.log(err);
-    }        
 }
 
 function sleep (sec) {
