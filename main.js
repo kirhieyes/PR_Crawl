@@ -8,7 +8,8 @@ const request = require('request');
 let currRound = -1;
 let currTurn = -1;
 let currDonghang = -1;
-let currBall = -1;
+let currPBall = -1;
+let currNBall = -1;
 let browser;
 let page;
 let callNum = 0;
@@ -34,7 +35,8 @@ async function StartCrawl() {
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
-            currBall = -1;
+            currPBall = -1;
+            currNBall = -1;
             if(currRound === 72) return;
             RunPowerball();
             RunChance();
@@ -48,7 +50,8 @@ async function StartCrawl() {
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
-            currBall = -1;
+            currPBall = -1;
+            currNBall = -1;
             if(currRound === 72) return;
             RunEOS();
         }
@@ -66,7 +69,8 @@ async function RunPowerball() {
         if(response != null){
             let data = response.data.update;
             if(data.round === currRound){
-                currBall = data.pb;
+                currPBall = data.pb;
+                currNBall = data.bsum % 10;
                 currDonghang = data.rownum;
                 SendData();
             }else{
@@ -80,7 +84,7 @@ async function RunPowerball() {
     }).catch(error => {
         console.log("베픽 파워볼 조회 실패");
         callNum++;
-        if(currBall === -1) RunPowerball__();
+        if(currPBall === -1) RunPowerball__();
     });
 }
 
@@ -95,7 +99,8 @@ async function RunEOS() {
         if(response != null){
             let data = response.data.update;
             if(data.round === currRound){
-                currBall = data.pb;
+                currPBall = data.pb;
+                currNBall = data.bsum % 10;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -109,7 +114,7 @@ async function RunEOS() {
     }).catch(error => {
         console.log("베픽 EOS 조회 실패");
         callNum++;
-        if(currBall === -1) RunEOS__();
+        if(currPBall === -1) RunEOS__();
     });
 }
 
@@ -124,7 +129,8 @@ async function RunPowerball__() {
         if(response != null){
             let data = response.data;
             if(data.date_round === currRound){
-                currBall = Number(data.ball[5]);
+                currPBall = Number(data.ball[5]);
+                currNBall = data.def_ball_sum % 10;
                 currDonghang = data.times;
                 SendData();
             }else{
@@ -138,7 +144,7 @@ async function RunPowerball__() {
     }).catch(error => {
         console.log("엔트리 파워볼 조회 실패");
         callNum++;
-        if(currBall === -1) RunPowerball();
+        if(currPBall === -1) RunPowerball();
     });
 }
 
@@ -153,7 +159,8 @@ async function RunEOS__() {
         if(response != null)   {
             let data = response.data;
             if(data.date_round === currRound){
-                currBall = Number(data.ball[5]);
+                currPBall = Number(data.ball[5]);
+                currNBall = data.def_ball_sum % 10;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -167,7 +174,7 @@ async function RunEOS__() {
     }).catch(error => {
         console.log("엔트리 EOS 조회 실패");
         callNum++;
-        if(currBall === -1) RunEOS();
+        if(currPBall === -1) RunEOS();
     });
 }
 
@@ -199,7 +206,8 @@ async function RunChance() {
         let pBall = Number(await frame.$eval('#round-history > tr:nth-child(1) > td:nth-child(2)', element => element.textContent));     // 9
 
         if(round === currRound){
-            currBall = pBall;
+            currPBall = pBall;
+            currNBall = (ball1 + ball2 + ball3 + ball4 + ball5) % 10;
             currDonghang = roundDong;
             SendData();
         }
@@ -311,7 +319,8 @@ function SendData () {
                 turn: currTurn.toString(),
                 donghang: currDonghang.toString(),
                 round: currRound.toString(),
-                ball: currBall.toString()
+                pBall: currPBall.toString(),
+                nBall: currNBall.toString()
             }
         }
     
