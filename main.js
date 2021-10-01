@@ -319,6 +319,7 @@ function SendData () {
                 turn: currTurn.toString(),
                 donghang: currDonghang.toString(),
                 round: currRound.toString(),
+                ball: currPBall.toString(),
                 pBall: currPBall.toString(),
                 nBall: currNBall.toString()
             }
