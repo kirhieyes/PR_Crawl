@@ -70,7 +70,7 @@ async function RunPowerball() {
             let data = response.data.update;
             if(data.round === currRound){
                 currPBall = data.pb;
-                currNBall = data.bsum % 10;
+                currNBall = data.bsum;
                 currDonghang = data.rownum;
                 SendData();
             }else{
@@ -100,7 +100,7 @@ async function RunEOS() {
             let data = response.data.update;
             if(data.round === currRound){
                 currPBall = data.pb;
-                currNBall = data.bsum % 10;
+                currNBall = data.bsum;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -130,7 +130,7 @@ async function RunPowerball__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currPBall = Number(data.ball[5]);
-                currNBall = data.def_ball_sum % 10;
+                currNBall = data.def_ball_sum;
                 currDonghang = data.times;
                 SendData();
             }else{
@@ -160,7 +160,7 @@ async function RunEOS__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currPBall = Number(data.ball[5]);
-                currNBall = data.def_ball_sum % 10;
+                currNBall = data.def_ball_sum;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -207,7 +207,7 @@ async function RunChance() {
 
         if(round === currRound){
             currPBall = pBall;
-            currNBall = (ball1 + ball2 + ball3 + ball4 + ball5) % 10;
+            currNBall = ball1 + ball2 + ball3 + ball4 + ball5;
             currDonghang = roundDong;
             SendData();
         }
