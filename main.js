@@ -13,6 +13,7 @@ let currNBall = -1;
 let browser;
 let page;
 let callNum = 0;
+let bSend = false;
 
 StartCrawl();
 
@@ -32,6 +33,7 @@ async function StartCrawl() {
         var time = Number(moment().format("HHmm"));
         
         if(time > 600) {
+            bSend = false;
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
@@ -47,6 +49,7 @@ async function StartCrawl() {
         var time = Number(moment().format("HHmm"));
         
         if(time > 0 && time <= 600) {
+            bSend = false;
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
@@ -311,6 +314,8 @@ const getLastEOS = async (round) => {
 };
 
 function SendData () {
+    if(bSend) return;
+    
     try {
         const options = {
             uri: "http://165.76.184.119:3000/race/setCrawlData",
@@ -327,6 +332,7 @@ function SendData () {
     
         request(options, function(err, res, body) {
             if(res && res.statusCode === 200){
+                bSend = true;
                 console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼합 : " + currNBall + " ]");
             }else{
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패");
