@@ -9,7 +9,8 @@ let currRound = -1;
 let currTurn = -1;
 let currDonghang = -1;
 let currPBall = -1;
-let currNBall = -1;
+let currNBalls = "";
+let currNBallSum = -1;
 let browser;
 let page;
 let callNum = 0;
@@ -38,7 +39,8 @@ async function StartCrawl() {
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
             currPBall = -1;
-            currNBall = -1;
+            currNBalls = "";
+            currNBallSum = -1;
             if(currRound === 72) return;
             RunPowerball();
             RunChance();
@@ -54,7 +56,8 @@ async function StartCrawl() {
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
             currTurn = Number(moment().format("YYMMDDHHmm"));
             currPBall = -1;
-            currNBall = -1;
+            currNBalls = "";
+            currNBallSum = -1;
             if(currRound === 72) return;
             RunEOS();
         }
@@ -73,7 +76,8 @@ async function RunPowerball() {
             let data = response.data.update;
             if(data.round === currRound){
                 currPBall = data.pb;
-                currNBall = data.bsum;
+                currNBalls = data.b1 + "|" + data.b2 + "|" + data.b3 + "|" + data.b4 + "|" + data.b5;
+                currNBallSum = data.bsum;
                 currDonghang = data.rownum;
                 SendData();
             }else{
@@ -103,7 +107,8 @@ async function RunEOS() {
             let data = response.data.update;
             if(data.round === currRound){
                 currPBall = data.pb;
-                currNBall = data.bsum;
+                currNBalls = data.b1 + "|" + data.b2 + "|" + data.b3 + "|" + data.b4 + "|" + data.b5;
+                currNBallSum = data.bsum;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -133,7 +138,8 @@ async function RunPowerball__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currPBall = Number(data.ball[5]);
-                currNBall = data.def_ball_sum;
+                currNBalls = data.ball[0] + "|" + data.ball[1] + "|" + data.ball[2] + "|" + data.ball[3] + "|" + data.ball[4];
+                currNBallSum = data.def_ball_sum;
                 currDonghang = data.times;
                 SendData();
             }else{
@@ -163,7 +169,8 @@ async function RunEOS__() {
             let data = response.data;
             if(data.date_round === currRound){
                 currPBall = Number(data.ball[5]);
-                currNBall = data.def_ball_sum;
+                currNBalls = data.ball[0] + "|" + data.ball[1] + "|" + data.ball[2] + "|" + data.ball[3] + "|" + data.ball[4];
+                currNBallSum = data.def_ball_sum;
                 currDonghang = 0;
                 SendData();
             }else{
@@ -210,7 +217,8 @@ async function RunChance() {
 
         if(round === currRound){
             currPBall = pBall;
-            currNBall = ball1 + ball2 + ball3 + ball4 + ball5;
+            currNBalls = ball1 + "|" + ball2 + "|" + ball3 + "|" + ball4 + "|" + ball5;
+            currNBallSum = ball1 + ball2 + ball3 + ball4 + ball5;
             currDonghang = roundDong;
             SendData();
         }
@@ -326,14 +334,15 @@ function SendData () {
                 round: currRound.toString(),
                 ball: currPBall.toString(),
                 pBall: currPBall.toString(),
-                nBall: currNBall.toString()
+                nBalls : currNBallSum,
+                nBall: currNBallSum.toString()
             }
         }
     
         request(options, function(err, res, body) {
             if(res && res.statusCode === 200){
                 bSend = true;
-                console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼합 : " + currNBall + " ]");
+                console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼합 : " + currNBallSum + " ]");
             }else{
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패");
             }
