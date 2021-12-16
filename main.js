@@ -342,7 +342,7 @@ function SendData () {
         request(options, function(err, res, body) {
             if(res && res.statusCode === 200){
                 bSend = true;
-                console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼합 : " + currNBallSum + " ]");
+                console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
             }else{
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패");
             }
