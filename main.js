@@ -334,7 +334,7 @@ function SendData () {
                 round: currRound.toString(),
                 ball: currPBall.toString(),
                 pBall: currPBall.toString(),
-                nBalls : currNBallSum,
+                nBalls : currNBalls,
                 nBall: currNBallSum.toString()
             }
         }
