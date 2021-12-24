@@ -22,13 +22,13 @@ async function StartCrawl() {
     console.log(">>>>>>>>>>>>>>>>>>>>> startCrawl - API <<<<<<<<<<<<<<<<<<<<<");
     browser = await puppeteer.launch({
         headless: true,
-        timeout: 5000,
         // executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         args: ["--mute-audio", "--fast-start", "--disable-extensions", "--disable-setuid-sandbox", "--no-sandbox"],
         ignoreHTTPSErrors: true,
     });        
 
     page = await browser.newPage();
+    await page.setDefaultNavigationTimeout(0);
 
     schedule.scheduleJob("40 4-59/5 * * * *", async function () {
         var time = Number(moment().format("HHmm"));
