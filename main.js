@@ -89,7 +89,7 @@ async function RunPowerball() {
             RunPowerball__();
         }
     }).catch(error => {
-        console.log("베픽 파워볼 조회 실패");
+        console.log("베픽 파워볼 조회 실패 : " + currTurn);
         callNum++;
         if(currPBall === -1) RunPowerball__();
     });
@@ -120,7 +120,7 @@ async function RunEOS() {
             RunEOS__();
         }
     }).catch(error => {
-        console.log("베픽 EOS 조회 실패");
+        console.log("베픽 EOS 조회 실패 : " + currTurn);
         callNum++;
         if(currPBall === -1) RunEOS__();
     });
@@ -151,7 +151,7 @@ async function RunPowerball__() {
             RunPowerball();
         }
     }).catch(error => {
-        console.log("엔트리 파워볼 조회 실패");
+        console.log("엔트리 파워볼 조회 실패 : " + currTurn);
         callNum++;
         if(currPBall === -1) RunPowerball();
     });
@@ -182,7 +182,7 @@ async function RunEOS__() {
             RunEOS();
         }
     }).catch(error => {
-        console.log("엔트리 EOS 조회 실패");
+        console.log("엔트리 EOS 조회 실패 : " + currTurn);
         callNum++;
         if(currPBall === -1) RunEOS();
     });
@@ -223,7 +223,7 @@ async function RunChance() {
             SendData();
         }
     } catch (err) {        
-        console.log("우리볼 파워볼 조회 실패");
+        console.log("우리볼 파워볼 조회 실패 : " + currTurn);
     }
 }
 
@@ -241,7 +241,7 @@ const getBepickPowerball = async (timestamp) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("베픽 파워볼 axios 실패");
+        console.log("베픽 파워볼 axios 실패 : " + currTurn);
     }
 };
 
@@ -258,7 +258,7 @@ const getBepickEOS = async (timestamp) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("베픽 EOS axios 실패");
+        console.log("베픽 EOS axios 실패 : " + currTurn);
     }
 };
 
@@ -272,7 +272,7 @@ const getEntryPowerball = async (timestamp) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("엔트리 파워볼 axios 실패");
+        console.log("엔트리 파워볼 axios 실패 : " + currTurn);
     }
 };
 
@@ -289,7 +289,7 @@ const getEntryEOS = async (timestamp) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("엔트리 EOS axios 실패");
+        console.log("엔트리 EOS axios 실패 : " + currTurn);
     }
 };
 
@@ -303,7 +303,7 @@ const getLastPowerball = async (round) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("베픽 LAST 파워볼 axios 실패");
+        console.log("베픽 LAST 파워볼 axios 실패 : " + currTurn);
     }
 };
 
@@ -317,7 +317,7 @@ const getLastEOS = async (round) => {
             withCredentials: true
         });
     } catch (error) {
-        console.log("베픽 LAST EOS axios 실패");
+        console.log("베픽 LAST EOS axios 실패 : " + currTurn);
     }
 };
 
@@ -344,7 +344,7 @@ function SendData () {
                 bSend = true;
                 console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
             }else{
-                console.log(">>>>>>>> " + currRound + " 결과 전송 실패");
+                console.log(">>>>>>>> " + currRound + " 결과 전송 실패 : " + currTurn);
             }
         });
     } catch (err) {
