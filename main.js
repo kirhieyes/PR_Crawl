@@ -5,6 +5,7 @@ const axios = require('axios');
 const puppeteer = require("puppeteer");
 const request = require('request');
 
+let crawlMode = 1;              // 0: 동행/이오스 모드, 1: 이오스 전용모드
 let currRound = -1;
 let currTurn = -1;
 let currDonghang = -1;
@@ -31,6 +32,7 @@ async function StartCrawl() {
     await page.setDefaultNavigationTimeout(0);
 
     schedule.scheduleJob("40 4-59/5 * * * *", async function () {
+        if(crawlMode != 0) return;
         var time = Number(moment().format("HHmm"));
         
         if(time > 600) {
@@ -48,6 +50,7 @@ async function StartCrawl() {
     });
 
     schedule.scheduleJob("5 */5 * * * *", async function () {
+        if(crawlMode != 0) return;
         var time = Number(moment().format("HHmm"));
         
         if(time > 0 && time <= 600) {
@@ -61,6 +64,21 @@ async function StartCrawl() {
             if(currRound === 72) return;
             RunEOS();
         }
+    });
+
+    schedule.scheduleJob("5 */5 * * * *", async function () {
+        if(crawlMode != 1) return;
+        var time = Number(moment().format("HHmm"));
+        
+        bSend = false;
+        callNum = 0;
+        currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
+        currTurn = Number(moment().format("YYMMDDHHmm"));
+        currPBall = -1;
+        currNBalls = "";
+        currNBallSum = -1;
+        if(currRound === 72) return;
+        RunEOS();
     });
 };
 
