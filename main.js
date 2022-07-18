@@ -116,6 +116,7 @@ async function RunPowerball() {
 // 베픽 eos
 async function RunEOS() {    
     if(callNum > 10) {
+        SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
@@ -178,6 +179,7 @@ async function RunPowerball__() {
 // 엔트리 eos
 async function RunEOS__() {    
     if(callNum > 10) {
+        SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
@@ -363,6 +365,39 @@ function SendData () {
             if(res && res.statusCode === 200){
                 bSend = true;
                 console.log(">>>>>>>> " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
+            }else{
+                console.log(">>>>>>>> " + currRound + " 결과 전송 실패 : " + currTurn);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+function SendFailData () {
+    if(bSend) return;
+    
+    try {
+        const options = {
+            uri: "http://165.76.184.119:3000/race/setCrawlFailData",
+            method: 'POST',
+            form: {
+                turn: currTurn.toString(),
+                donghang: currDonghang.toString(),
+                round: currRound.toString(),
+                ball: currPBall.toString(),
+                pBall: currPBall.toString(),
+                nBalls : currNBalls,
+                nBall: currNBallSum.toString()
+            }
+        }
+
+        console.log(currRound + " 라운드 조회 실패. 오류 데이터 전송 [ pBall : " + currPBall.toString() + ", nBalls : " + currNBalls + " ]");
+    
+        request(options, function(err, res, body) {
+            if(res && res.statusCode === 200){
+                bSend = true;
+                console.log(">>>>>>>> " + currRound + " 실패 결과 전송 성공");
             }else{
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패 : " + currTurn);
             }
