@@ -66,7 +66,7 @@ async function StartCrawl() {
         }
     });
 
-    schedule.scheduleJob("5 */5 * * * *", async function () {
+    schedule.scheduleJob("0 */5 * * * *", async function () {
         if(crawlMode != 1) return;
         var time = Number(moment().format("HHmm"));
         
