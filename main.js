@@ -73,6 +73,7 @@ async function StartCrawl() {
         bSend = false;
         callNum = 0;
         currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
+        if(currRound === 0) currRound = 288;
         currTurn = Number(moment().format("YYMMDDHHmm"));
         currPBall = -1;
         currNBalls = "";
