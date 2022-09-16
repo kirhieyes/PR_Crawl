@@ -16,6 +16,8 @@ let browser;
 let page;
 let callNum = 0;
 let bSend = false;
+// let url = "http://165.76.184.119:3000/race/setCrawlData";
+let url = "http://43.200.161.132:3000/race/setCrawlData";
 
 StartCrawl();
 
@@ -117,7 +119,7 @@ async function RunPowerball() {
 // 베픽 eos
 async function RunEOS() {    
     if(callNum > 10) {
-        SendFailData();
+        // SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
@@ -180,7 +182,7 @@ async function RunPowerball__() {
 // 엔트리 eos
 async function RunEOS__() {    
     if(callNum > 10) {
-        SendFailData();
+        // SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
@@ -347,7 +349,7 @@ function SendData () {
     
     try {
         const options = {
-            uri: "http://165.76.184.119:3000/race/setCrawlData",
+            uri: url,
             method: 'POST',
             form: {
                 turn: currTurn.toString(),
