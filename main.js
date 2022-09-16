@@ -361,7 +361,6 @@ function SendData () {
             }
         }
 
-        func.debug(4, ">>>>>>>>>>>>>>> Set EOS : " + moment().format("HH:mm:ss.SS"));
         console.log(currRound + " 라운드 조회 성공. 데이터 전송 [ pBall : " + currPBall.toString() + ", nBalls : " + currNBalls + " ]");
     
         request(options, function(err, res, body) {
