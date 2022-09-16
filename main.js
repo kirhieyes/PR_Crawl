@@ -361,8 +361,6 @@ function SendData () {
             }
         }
 
-        console.log(currRound + " 라운드 조회 성공. 데이터 전송 [ pBall : " + currPBall.toString() + ", nBalls : " + currNBalls + " ]");
-    
         request(options, function(err, res, body) {
             if(res && res.statusCode === 200){
                 bSend = true;
