@@ -70,7 +70,6 @@ async function StartCrawl() {
 
     schedule.scheduleJob("0 */5 * * * *", async function () {
         if(crawlMode != 1) return;
-        var time = Number(moment().format("HHmm"));
         
         bSend = false;
         callNum = 0;
