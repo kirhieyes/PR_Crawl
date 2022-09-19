@@ -16,8 +16,8 @@ let browser;
 let page;
 let callNum = 0;
 let bSend = false;
-let url = "http://165.76.184.119:3000/race/setCrawlData";
-// let url = "http://43.200.161.132:3000/race/setCrawlData";
+// let url = "http://165.76.184.119:3000/race/setCrawlData";
+let url = "http://43.200.161.132:3000/race/setCrawlData";
 
 StartCrawl();
 
