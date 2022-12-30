@@ -17,7 +17,7 @@ let page;
 let callNum = 0;
 let bSend = false;
 // let url = "http://165.76.184.119:3000/race/setCrawlData";
-let url = "http://43.200.161.132:3000/race/setCrawlData";
+let url = "http://43.200.161.132:3000/powerball/setCrawlData";
 
 StartCrawl();
 
@@ -28,16 +28,16 @@ async function StartCrawl() {
         // executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         args: ["--mute-audio", "--fast-start", "--disable-extensions", "--disable-setuid-sandbox", "--no-sandbox"],
         ignoreHTTPSErrors: true,
-    });        
+    });
 
     page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
 
     schedule.scheduleJob("40 4-59/5 * * * *", async function () {
-        if(crawlMode != 0) return;
+        if (crawlMode != 0) return;
         var time = Number(moment().format("HHmm"));
-        
-        if(time > 600) {
+
+        if (time > 600) {
             bSend = false;
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
@@ -45,17 +45,17 @@ async function StartCrawl() {
             currPBall = -1;
             currNBalls = "";
             currNBallSum = -1;
-            if(currRound === 72) return;
+            if (currRound === 72) return;
             RunPowerball();
             RunChance();
         }
     });
 
     schedule.scheduleJob("5 */5 * * * *", async function () {
-        if(crawlMode != 0) return;
+        if (crawlMode != 0) return;
         var time = Number(moment().format("HHmm"));
-        
-        if(time > 0 && time <= 600) {
+
+        if (time > 0 && time <= 600) {
             bSend = false;
             callNum = 0;
             currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
@@ -63,150 +63,150 @@ async function StartCrawl() {
             currPBall = -1;
             currNBalls = "";
             currNBallSum = -1;
-            if(currRound === 72) return;
+            if (currRound === 72) return;
             RunEOS();
         }
     });
 
     schedule.scheduleJob("0 */5 * * * *", async function () {
-        if(crawlMode != 1) return;
-        
+        if (crawlMode != 1) return;
+
         bSend = false;
         callNum = 0;
         currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
-        if(currRound === 0) currRound = 288;
+        if (currRound === 0) currRound = 288;
         currTurn = Number(moment().format("YYMMDDHHmm"));
         currPBall = -1;
         currNBalls = "";
         currNBallSum = -1;
-        if(currRound === 72) return;
+        if (currRound === 72) return;
         RunEOS();
     });
 };
 
 // 베픽 파워볼
 async function RunPowerball() {
-    if(callNum > 10) {
+    if (callNum > 10) {
         return;
     }
     var timestamp = new Date().getTime();
     await sleep(1000);
     getBepickPowerball(timestamp).then(response => {
-        if(response != null){
+        if (response != null) {
             let data = response.data.update;
-            if(data.round === currRound){
+            if (data.round === currRound) {
                 currPBall = data.pb;
                 currNBalls = data.b1 + "|" + data.b2 + "|" + data.b3 + "|" + data.b4 + "|" + data.b5;
                 currNBallSum = data.bsum;
                 currDonghang = data.rownum;
                 SendData();
-            }else{
+            } else {
                 callNum++;
                 RunPowerball__();
             }
-        }else{
+        } else {
             callNum++;
             RunPowerball__();
         }
     }).catch(error => {
         console.log("베픽 파워볼 조회 실패 : " + currTurn);
         callNum++;
-        if(currPBall === -1) RunPowerball__();
+        if (currPBall === -1) RunPowerball__();
     });
 }
 
 // 베픽 eos
-async function RunEOS() {    
-    if(callNum > 10) {
+async function RunEOS() {
+    if (callNum > 10) {
         // SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
     await sleep(1000);
     getBepickEOS(timestamp).then(response => {
-        if(response != null){
+        if (response != null) {
             let data = response.data.update;
-            if(data.round === currRound){
+            if (data.round === currRound) {
                 currPBall = data.pb;
                 currNBalls = data.b1 + "|" + data.b2 + "|" + data.b3 + "|" + data.b4 + "|" + data.b5;
                 currNBallSum = data.bsum;
                 currDonghang = 0;
                 SendData();
-            }else{
+            } else {
                 callNum++;
                 RunEOS__();
             }
-        }else{
+        } else {
             callNum++;
             RunEOS__();
         }
     }).catch(error => {
         console.log("베픽 EOS 조회 실패 : " + currTurn);
         callNum++;
-        if(currPBall === -1) RunEOS__();
+        if (currPBall === -1) RunEOS__();
     });
 }
 
 // 엔트리 파워볼
 async function RunPowerball__() {
-    if(callNum > 10) {
+    if (callNum > 10) {
         return;
     }
     var timestamp = new Date().getTime();
     await sleep(1000);
     getEntryPowerball(timestamp).then(response => {
-        if(response != null){
+        if (response != null) {
             let data = response.data;
-            if(data.date_round === currRound){
+            if (data.date_round === currRound) {
                 currPBall = Number(data.ball[5]);
                 currNBalls = data.ball[0] + "|" + data.ball[1] + "|" + data.ball[2] + "|" + data.ball[3] + "|" + data.ball[4];
                 currNBallSum = data.def_ball_sum;
                 currDonghang = data.times;
                 SendData();
-            }else{
+            } else {
                 callNum++;
                 RunPowerball();
             }
-        }else{
+        } else {
             callNum++;
             RunPowerball();
         }
     }).catch(error => {
         console.log("엔트리 파워볼 조회 실패 : " + currTurn);
         callNum++;
-        if(currPBall === -1) RunPowerball();
+        if (currPBall === -1) RunPowerball();
     });
 }
 
 // 엔트리 eos
-async function RunEOS__() {    
-    if(callNum > 10) {
+async function RunEOS__() {
+    if (callNum > 10) {
         // SendFailData();
         return;
     }
     var timestamp = new Date().getTime();
     await sleep(1000);
-    getEntryEOS(timestamp).then(response => {     
-        if(response != null)   {
+    getEntryEOS(timestamp).then(response => {
+        if (response != null) {
             let data = response.data;
-            if(data.date_round === currRound){
+            if (data.date_round === currRound) {
                 currPBall = Number(data.ball[5]);
                 currNBalls = data.ball[0] + "|" + data.ball[1] + "|" + data.ball[2] + "|" + data.ball[3] + "|" + data.ball[4];
                 currNBallSum = data.def_ball_sum;
                 currDonghang = 0;
                 SendData();
-            }else{
+            } else {
                 callNum++;
                 RunEOS();
             }
-        }else{
+        } else {
             callNum++;
             RunEOS();
         }
     }).catch(error => {
         console.log("엔트리 EOS 조회 실패 : " + currTurn);
         callNum++;
-        if(currPBall === -1) RunEOS();
+        if (currPBall === -1) RunEOS();
     });
 }
 
@@ -216,11 +216,11 @@ async function RunChance() {
         await page.goto("https://www.wooriball.com/game_powerball.php");                    // 우리볼 5분 파워볼
         const frame = await page.frames().find(frame => frame.name() === "lecture2");
         await sleep(1000);
-        if(!frame) {
+        if (!frame) {
             throw new Error("프레임 못찾음");
         }
-    
-        
+
+
         let roundStr = await frame.$eval('#round-history > tr:nth-child(1) > td:nth-child(1)', element => element.textContent);         // 1112606 (206)
         let roundArr = roundStr.split(' ');
         let roundDong = Number(roundArr[0].trim());
@@ -229,22 +229,22 @@ async function RunChance() {
         let round = Number(roundStr2);
         let ballStr = await frame.$eval('#round-history > tr:nth-child(1) > td:nth-child(6)', element => element.textContent);          // 24 8 4 28 18
         let ballArr = ballStr.split(' ');
-        
+
         let ball1 = Number(ballArr[0]);
         let ball2 = Number(ballArr[1]);
         let ball3 = Number(ballArr[2]);
         let ball4 = Number(ballArr[3]);
-        let ball5 = Number(ballArr[4]);        
+        let ball5 = Number(ballArr[4]);
         let pBall = Number(await frame.$eval('#round-history > tr:nth-child(1) > td:nth-child(2)', element => element.textContent));     // 9
 
-        if(round === currRound){
+        if (round === currRound) {
             currPBall = pBall;
             currNBalls = ball1 + "|" + ball2 + "|" + ball3 + "|" + ball4 + "|" + ball5;
             currNBallSum = ball1 + ball2 + ball3 + ball4 + ball5;
             currDonghang = roundDong;
             SendData();
         }
-    } catch (err) {        
+    } catch (err) {
         console.log("우리볼 파워볼 조회 실패 : " + currTurn);
     }
 }
@@ -343,9 +343,9 @@ const getLastEOS = async (round) => {
     }
 };
 
-function SendData () {
-    if(bSend) return;
-    
+function SendData() {
+    if (bSend) return;
+
     try {
         const options = {
             uri: url,
@@ -356,16 +356,16 @@ function SendData () {
                 round: currRound.toString(),
                 ball: currPBall.toString(),
                 pBall: currPBall.toString(),
-                nBalls : currNBalls,
+                nBalls: currNBalls,
                 nBall: currNBallSum.toString()
             }
         }
 
-        request(options, function(err, res, body) {
-            if(res && res.statusCode === 200){
+        request(options, function (err, res, body) {
+            if (res && res.statusCode === 200) {
                 bSend = true;
                 console.log(">>>>>>>> [" + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
-            }else{
+            } else {
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패 : " + currTurn);
             }
         });
@@ -374,9 +374,9 @@ function SendData () {
     }
 }
 
-function SendFailData () {
-    if(bSend) return;
-    
+function SendFailData() {
+    if (bSend) return;
+
     try {
         const options = {
             uri: "http://165.76.184.119:3000/race/setCrawlFailData",
@@ -387,18 +387,18 @@ function SendFailData () {
                 round: currRound.toString(),
                 ball: currPBall.toString(),
                 pBall: currPBall.toString(),
-                nBalls : currNBalls,
+                nBalls: currNBalls,
                 nBall: currNBallSum.toString()
             }
         }
 
         console.log(currRound + " 라운드 조회 실패. 오류 데이터 전송 [ pBall : " + currPBall.toString() + ", nBalls : " + currNBalls + " ]");
-    
-        request(options, function(err, res, body) {
-            if(res && res.statusCode === 200){
+
+        request(options, function (err, res, body) {
+            if (res && res.statusCode === 200) {
                 bSend = true;
                 console.log(">>>>>>>> " + currRound + " 실패 결과 전송 성공");
-            }else{
+            } else {
                 console.log(">>>>>>>> " + currRound + " 결과 전송 실패 : " + currTurn);
             }
         });
@@ -407,6 +407,6 @@ function SendFailData () {
     }
 }
 
-function sleep (sec) {
+function sleep(sec) {
     return new Promise((resolve) => setTimeout(resolve, sec));
 }
