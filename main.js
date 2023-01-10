@@ -1,9 +1,9 @@
 "use strict";
-const schedule = require("node-schedule");
-const moment = require("moment");
+const schedule = require("../GS_Share/node_modules/node-schedule");
+const moment = require("../GS_Share/node_modules/moment");
 const axios = require('axios');
 const puppeteer = require("puppeteer");
-const request = require('request');
+const request = require('../GS_Share/node_modules/request');
 
 let crawlMode = 1;              // 0: 동행/이오스 모드, 1: 이오스 전용모드
 let currRound = -1;
