@@ -1,7 +1,7 @@
 "use strict";
 const schedule = require("../GS_Share/node_modules/node-schedule");
 const moment = require("../GS_Share/node_modules/moment");
-const axios = require('axios');
+const axios = require('../GS_Share/node_modules/axios');
 const puppeteer = require("puppeteer");
 const request = require('../GS_Share/node_modules/request');
 

@@ -7,7 +7,6 @@
     "start": "sudo pm2 start main.js --env production"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "puppeteer": "^10.2.0"
   }
 }
