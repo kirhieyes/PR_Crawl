@@ -8,6 +8,5 @@
   },
   "dependencies": {
     "puppeteer": "^10.2.0"
-  },
-  "type": "module"
+  }
 }
