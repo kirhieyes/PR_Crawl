@@ -124,14 +124,12 @@ async function RunEOS() {
         return;
     }
 
-    console.log('베픽 eos run')
     var timestamp = new Date().getTime();
     await sleep(1000);
     getBepickEOS(timestamp).then(response => {
         if (response != null) {
-            console.log(response)
-            console.log(response.data.update)
             let data = response.data.update;
+            console.log("베픽 round: " + data.round + " | 게임 round : " + currRound)
             if (data.round === currRound) {
                 currPBall = data.pb;
                 currNBalls = data.b1 + "|" + data.b2 + "|" + data.b3 + "|" + data.b4 + "|" + data.b5;
@@ -139,10 +137,12 @@ async function RunEOS() {
                 currDonghang = 0;
                 SendData();
             } else {
+                console.log("베픽 EOS 조회 실패 : " + currTurn);
                 callNum++;
                 RunEOS__();
             }
         } else {
+            console.log("베픽 EOS 조회 실패 : " + currTurn);
             callNum++;
             RunEOS__();
         }
@@ -195,6 +195,7 @@ async function RunEOS__() {
     getEntryEOS(timestamp).then(response => {
         if (response != null) {
             let data = response.data;
+            console.log("엔트리 round: " + data.date_round + " | 게임 round : " + currRound)
             if (data.date_round === currRound) {
                 currPBall = Number(data.ball[5]);
                 currNBalls = data.ball[0] + "|" + data.ball[1] + "|" + data.ball[2] + "|" + data.ball[3] + "|" + data.ball[4];
@@ -202,10 +203,12 @@ async function RunEOS__() {
                 currDonghang = 0;
                 SendData();
             } else {
+                console.log("엔트리 EOS 조회 실패 : " + currTurn);
                 callNum++;
                 RunEOS();
             }
         } else {
+            console.log("엔트리 EOS 조회 실패 : " + currTurn);
             callNum++;
             RunEOS();
         }
