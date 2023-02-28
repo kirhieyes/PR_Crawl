@@ -123,10 +123,14 @@ async function RunEOS() {
         // SendFailData();
         return;
     }
+
+    console.log('베픽 eos run')
     var timestamp = new Date().getTime();
     await sleep(1000);
     getBepickEOS(timestamp).then(response => {
         if (response != null) {
+            console.log(response)
+            console.log(response.data.update)
             let data = response.data.update;
             if (data.round === currRound) {
                 currPBall = data.pb;
