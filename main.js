@@ -479,7 +479,7 @@ function SendFailData() {
 async function RunPGB() {
     if (callNum2 > 10) {
         // race.FailedResult(1);
-        func.debug(3, "RunPGB", "PGB 조회 실패 최종")
+        console.log(">>>>>>>> PGB 조회 실패 최종");
         return;
     }
     getPGB().then(response => {
@@ -494,7 +494,7 @@ async function RunPGB() {
                 currNBalls1 = number.substr(0, 2) + "|" + number.substr(2, 2) + "|" + number.substr(4, 2) + "|" + number.substr(6, 2) + "|" + number.substr(8, 2);
                 currNBallSum1 = data.numberSum;
                 SendData(2)
-                func.debug(4, currRound + " 라운드 PGB 값 넣음 : [ 파워볼 : " + currPBall1 + ", 일반볼 : " + currNBalls1 + ", 일반볼합 : " + currNBallSum1 + "]");
+                console.log(currRound + " 라운드 PGB 값 넣음 : [ 파워볼 : " + currPBall1 + ", 일반볼 : " + currNBalls1 + ", 일반볼합 : " + currNBallSum1 + "]");
             } else {
                 callNum2++;
                 if (currPBall1 === -1) RunPGB();
@@ -504,7 +504,7 @@ async function RunPGB() {
             if (currPBall1 === -1) RunPGB();
         }
     }).catch(error => {
-        func.debug(3, "RunPGB", "PGB 조회 실패", error)
+        console.log("PGB 조회 실패 : " + error)
         callNum2++;
         if (currPBall1 === -1) RunPGB();
     });
@@ -520,7 +520,7 @@ const getPGB = async () => {
             withCredentials: true
         });
     } catch (error) {
-        func.debug(3, "getPGB", "PGB axios 실패 : " + error);
+        console.log("PGB axios 실패 : " + error);
     }
 };
 
