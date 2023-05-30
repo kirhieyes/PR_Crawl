@@ -20,6 +20,7 @@ let page;
 let callNum = 0;
 let callNum2 = 0;
 let bSend = false;
+let bSend2 = false;
 
 // let url = "http://165.76.184.119:3000/race/setCrawlData";
 const pang_play_url = "http://43.200.161.132:3000/powerball/setCrawlData";
@@ -81,6 +82,7 @@ async function StartCrawl() {
         if (crawlMode != 1) return;
 
         bSend = false;
+        bSend2 = false;
         callNum = 0;
         callNum2 = 0;
         currRound = Math.ceil((moment().hours() * 60 + moment().minutes()) / 5);
@@ -365,8 +367,6 @@ const getLastEOS = async (round) => {
 };
 
 function SendData(type) {
-    if (bSend) return;
-
     try {
         let pang_url = ''
         let pangpang_url = ''
@@ -378,6 +378,8 @@ function SendData(type) {
 
         // type : 1 - EOS, 2 - PGB
         if (type === 1) {
+            if (bSend) return;
+            bSend = true;
             pang_url = pang_play_url
             pangpang_url = pang_pang_url
             ball = currPBall.toString()
@@ -385,6 +387,8 @@ function SendData(type) {
             nBalls = currNBalls
             nBall = currNBallSum.toString()
         } else {
+            if (bSend2) return;
+            bSend2 = true;
             powKind = 'PGB'
             pang_url = pang_play_url1
             pangpang_url = pang_pang_url1
@@ -424,7 +428,6 @@ function SendData(type) {
 
         request(options1, function (err, res, body) {
             if (res && res.statusCode === 200) {
-                bSend = true;
                 console.log(">>>>>>>> [ " + powKind + " 팡플레이 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
             } else {
                 console.log(">>>>>>>> " + powKind + " 팡플레이 : " + currRound + " 결과 전송 실패 : " + currTurn);
@@ -433,7 +436,6 @@ function SendData(type) {
 
         request(options2, function (err, res, body) {
             if (res && res.statusCode === 200) {
-                bSend = true;
                 console.log(">>>>>>>> [ " + powKind + " 팡팡 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
             } else {
                 console.log(">>>>>>>> " + powKind + " 팡팡 : " + currRound + " 결과 전송 실패 : " + currTurn);
@@ -496,7 +498,6 @@ async function RunPGB() {
                 currNBalls1 = number.substr(0, 2) + "|" + number.substr(2, 2) + "|" + number.substr(4, 2) + "|" + number.substr(6, 2) + "|" + number.substr(8, 2);
                 currNBallSum1 = data.numberSum;
                 SendData(2)
-                console.log(currRound + " 라운드 PGB 값 넣음 : [ 파워볼 : " + currPBall1 + ", 일반볼 : " + currNBalls1 + ", 일반볼합 : " + currNBallSum1 + "]");
             } else {
                 callNum2++;
                 if (currPBall1 === -1) RunPGB();
