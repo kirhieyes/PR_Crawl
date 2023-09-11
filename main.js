@@ -428,7 +428,7 @@ function SendData(type) {
 
         request(options1, function (err, res, body) {
             if (res && res.statusCode === 200) {
-                console.log(">>>>>>>> [ " + powKind + " 팡플레이 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
+                console.log(">>>>>>>> [ " + powKind + " 팡플레이 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + pBall + ", 일반볼 : " + nBalls + ", 일반볼합 : " + nBall + " ]");
             } else {
                 console.log(">>>>>>>> " + powKind + " 팡플레이 : " + currRound + " 결과 전송 실패 : " + currTurn);
             }
@@ -436,7 +436,7 @@ function SendData(type) {
 
         request(options2, function (err, res, body) {
             if (res && res.statusCode === 200) {
-                console.log(">>>>>>>> [ " + powKind + " 팡팡 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + currPBall + ", 일반볼 : " + currNBalls + ", 일반볼합 : " + currNBallSum + " ]");
+                console.log(">>>>>>>> [ " + powKind + " 팡팡 " + moment().format("HH:mm:ss.SS") + "] " + currTurn + "턴, " + currRound + " 결과 전송 성공 : [ 파워볼 : " + pBall + ", 일반볼 : " + nBalls + ", 일반볼합 : " + nBall + " ]");
             } else {
                 console.log(">>>>>>>> " + powKind + " 팡팡 : " + currRound + " 결과 전송 실패 : " + currTurn);
             }
